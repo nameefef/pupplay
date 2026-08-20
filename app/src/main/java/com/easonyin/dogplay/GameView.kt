@@ -75,10 +75,11 @@ class GameView(ctx: Context, private val prefs: Prefs) : View(ctx) {
 
     private fun loadAssets() {
         if (prefs.prey == PreyType.CUSTOM && prefs.hasCustomPrey()) {
-            customPrey = decodeScaled(prefs.customPreyFile, 512)
+            // 3.4 倍 + 高 DPI 屏下 512px 会被放糊，留足余量
+            customPrey = decodeScaled(prefs.customPreyFile, 1536)
         }
         if (prefs.bg == BgType.CUSTOM && prefs.hasCustomBg()) {
-            customBgSrc = decodeScaled(prefs.customBgFile, 2048)
+            customBgSrc = decodeScaled(prefs.customBgFile, 2560)
         }
         if (prefs.soundChoice == "custom" && prefs.hasCustomSound()) {
             sound.loadCustom(prefs.customSoundFile)
@@ -124,12 +125,26 @@ class GameView(ctx: Context, private val prefs: Prefs) : View(ctx) {
         rebuildPrey(w.toFloat(), h.toFloat())
     }
 
+    /**
+     * 猎物尺寸的双重上限，保证「放大」不会失控：
+     *  1) 单只不超过屏幕短边的 30%；
+     *  2) 所有猎物加起来占地不超过场地面积的 28%，数量越多单只越收敛。
+     * 两者取小。
+     */
+    private fun sizeCap(w: Float, h: Float): Float {
+        val n = prefs.count.coerceAtLeast(1)
+        val byArea = kotlin.math.sqrt(0.28f * w * h / n) / 0.9f
+        val byEdge = minOf(w, h) * 0.30f
+        return minOf(byArea, byEdge)
+    }
+
     private fun rebuildPrey(w: Float, h: Float) {
         preyList.clear()
         val mixed = prefs.prey == PreyType.MIXED
+        val cap = sizeCap(w, h)
         repeat(prefs.count) {
             val t = if (mixed) PreyType.playable.random(rnd) else prefs.prey
-            val p = Prey(t, dp, rnd, prefs.sizeMul)
+            val p = Prey(t, dp, rnd, prefs.sizeMul, cap)
             if (mixed) p.respawnType = { PreyType.playable.random(rnd) }
             p.spawn(w, h)
             preyList.add(p)

@@ -165,4 +165,5 @@
     <string name="lang_zh">中文</string>
     <string name="size_smallest">最小</string>
     <string name="size_biggest">最大 · 最好拍中</string>
+    <string name="size_cap_hint">不管推到多大，单只猎物都不会超过屏幕的三分之一；数量多的时候还会自动再收一点，场地不会被挤满。所有角色都是矢量绘制的，放到多大都不会糊。</string>
 </resources>

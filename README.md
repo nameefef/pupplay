@@ -14,7 +14,7 @@ The UI is available in English and Chinese — it follows your system language, 
   - Toys & lights: **red dot**, green laser, blue dot, tennis ball, frisbee, bone, rope toy, bubble, star, feather
   - Plus **Mixed** (every critter re-rolls its character) and **Custom image**
 - **9 built-in backgrounds**: pure dark, grass, starry sky, snow, wood floor, carpet, beach, blue sky, forest — plus your own photo
-- **5 speed settings, 1–10 critters** on screen at once, and **10 size levels (0.5×–3.4×)** — scale prey right up for clumsy paws, or down for precise little dogs
+- **5 speed settings, 1–10 critters** on screen at once, and **10 size levels (0.5×–3.4×)** — scale prey right up for clumsy paws, or down for precise little dogs. No critter ever exceeds ~30% of the screen, and they shrink slightly when many are on screen at once
 - **28 procedurally synthesised sounds** — catches and misses sound different. Pin one sound, or import your own audio file.
 - **Haptic feedback**: a double tap on a catch, a light tick on a miss, a triple buzz every 10 in a row. Three strength levels.
 - **Exit protection**: the back button and back gesture are both swallowed. To quit, you must hold the small circle in the top-left corner for 2/3/5 seconds (configurable).
@@ -110,7 +110,7 @@ app/src/main/res/
 └── values-zh/strings.xml    Chinese
 ```
 
-All artwork and audio is generated in code — there are no image or audio asset files in the repo apart from the launcher icon.
+Every character is drawn as Canvas vector paths, so they stay perfectly sharp at any size — there is no bitmap to pixelate. All artwork and audio is generated in code — there are no image or audio asset files in the repo apart from the launcher icon.
 
 ## Signing
 

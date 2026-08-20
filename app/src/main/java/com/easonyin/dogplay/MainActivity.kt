@@ -304,6 +304,11 @@ class MainActivity : AppCompatActivity() {
             sizeLabel?.text = getString(R.string.size_fmt, prefs.size, prefs.sizeLabel)
             preyTiles.forEach { it.invalidate() }
         })
+        wrap.addView(TextView(this).apply {
+            text = getString(R.string.size_cap_hint)
+            setTextColor(cDim); textSize = 11f
+            setPadding(pad(2), pad(6), 0, 0)
+        })
 
         wrap.addView(TextView(this).apply {
             text = getString(R.string.speed_hint)

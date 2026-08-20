@@ -17,7 +17,9 @@ class Prey(
     var type: PreyType,
     private val dp: Float,
     private val rnd: Random,
-    private val sizeMul: Float = 1f
+    private val sizeMul: Float = 1f,
+    /** 外部算好的尺寸上限（像素）。见 GameView.sizeCap */
+    private val maxSize: Float = Float.MAX_VALUE
 ) {
     var x = 0f; var y = 0f
     var vx = 0f; var vy = 0f
@@ -38,11 +40,11 @@ class Prey(
     var respawnType: (() -> PreyType)? = null
 
     /**
-     * 实际尺寸：按倍率放大后再按屏幕短边封顶。
+     * 实际尺寸：按倍率放大后再封顶。
      * 不封顶的话大倍率下留白会超过屏幕宽度，坐标算出来是负的，猎物会卡在角落。
      */
     private fun effectiveSize(w: Float, h: Float): Float =
-        (type.sizeDp * dp * sizeMul).coerceAtMost(minOf(w, h) * 0.42f)
+        (type.sizeDp * dp * sizeMul).coerceAtMost(minOf(maxSize, minOf(w, h) * 0.30f))
 
     /** 生成新一轮的位置 */
     fun spawn(w: Float, h: Float) {

@@ -619,6 +619,13 @@ object PreyRenderer {
         val dh = bh * scale
         rect.set(-dw / 2f, -dh / 2f, dw / 2f, dh / 2f)
         p.color = Color.WHITE
+        // 位图缩放走双线性滤波，放大时不会出锯齿
+        val hadFilter = p.isFilterBitmap
+        val hadDither = p.isDither
+        p.isFilterBitmap = true
+        p.isDither = true
         c.drawBitmap(bmp, Rect(0, 0, bmp.width, bmp.height), rect, p)
+        p.isFilterBitmap = hadFilter
+        p.isDither = hadDither
     }
 }

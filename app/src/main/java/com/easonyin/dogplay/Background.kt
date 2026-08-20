@@ -252,6 +252,8 @@ object BackgroundRenderer {
 
     /** 等比裁剪铺满（centerCrop） */
     fun drawCoverCrop(c: Canvas, bmp: Bitmap, w: Int, h: Int, p: Paint) {
+        p.isFilterBitmap = true
+        p.isDither = true
         val bw = bmp.width.toFloat()
         val bh = bmp.height.toFloat()
         if (bw <= 0f || bh <= 0f) return
