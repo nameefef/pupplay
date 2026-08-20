@@ -231,7 +231,8 @@ class MainActivity : AppCompatActivity() {
                 textSize = 12f
                 setPadding(pad(2), pad(8), 0, pad(6))
             })
-            val cols = 4
+            // 3 列，格子明显变大；4 列时角色只画到 27dp，大半个格子是空的
+            val cols = 3
             val tileW = (resources.displayMetrics.widthPixels - pad(32) - pad(24)) / cols
             val grid = GridLayout(this).apply { columnCount = cols }
             for (t in list) {
@@ -239,7 +240,7 @@ class MainActivity : AppCompatActivity() {
                 tile.picked = prefs.preyKey == t.key
                 tile.layoutParams = GridLayout.LayoutParams().apply {
                     width = tileW
-                    height = pad(86)
+                    height = pad(100)
                 }
                 tile.setOnClickListener {
                     if (t == PreyType.CUSTOM && !prefs.hasCustomPrey()) {

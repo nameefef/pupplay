@@ -144,12 +144,14 @@ class GameView(ctx: Context, private val prefs: Prefs) : View(ctx) {
     }
 
     /**
-     * 数量多时的额外收敛：所有猎物加起来占地不超过场地面积的 28%。
-     * 单只的上限已经由「档位 = 占屏幕短边的比例」天然保证了，这里只管别挤满屏。
+     * 数量多时的额外收敛：所有猎物加起来占地不超过场地面积的 42%。
+     * 单只的上限已经由「档位 = 占屏幕高度的比例」天然保证了，这里只管别挤满屏。
+     * 预算从 28% 放宽到 42%：28% 在只有两三只时就把高档位压死了，
+     * 滑杆推上去猎物却不再变大，反而更让人困惑。
      */
     private fun sizeCap(w: Float, h: Float): Float {
         val n = prefs.count.coerceAtLeast(1)
-        return kotlin.math.sqrt(0.28f * w * h / n) / 0.9f
+        return kotlin.math.sqrt(0.42f * w * h / n) / 0.9f
     }
 
     private fun rebuildPrey(w: Float, h: Float) {

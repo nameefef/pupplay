@@ -35,7 +35,7 @@ class Prey(
     var type: PreyType,
     private val dp: Float,
     private val rnd: Random,
-    /** 猎物占屏幕短边的比例，见 Prefs.sizeFraction */
+    /** 猎物「画出来的高度」占屏幕短边的比例，见 Prefs.sizeFraction */
     private val sizeFraction: Float = 0.18f,
     /** 数量多时的额外收敛上限（像素）。见 GameView.sizeCap */
     private val maxSize: Float = Float.MAX_VALUE
@@ -63,7 +63,7 @@ class Prey(
      * 这样同一档在任何手机上看起来都一样大，也天然不会超出屏幕。
      */
     private fun effectiveSize(w: Float, h: Float): Float =
-        (minOf(w, h) * sizeFraction * bodyRatio()).coerceAtMost(maxSize)
+        (minOf(w, h) * sizeFraction / SPRITE_HEIGHT * bodyRatio()).coerceAtMost(maxSize)
 
     /**
      * 体型系数：保留「狐狸比老鼠大」的差别，但把差距收窄到 0.75~1.25 倍，
@@ -298,5 +298,14 @@ class Prey(
         }
         PreyRenderer.draw(c, p, type, size, phase, custom)
         c.restore()
+    }
+
+    companion object {
+        /**
+         * 角色画出来的高度 ÷ 内部 size。渲染器里 size 是身体长度：
+         * 老鼠从耳尖到脚底约 0.67×size，狐狸约 0.8×，兔子带耳朵约 1.0×，光点约 1.0×。
+         * 取 0.8 作为整体近似，让「屏幕高度的百分之几」这个说法基本站得住。
+         */
+        private const val SPRITE_HEIGHT = 0.8f
     }
 }

@@ -6,6 +6,14 @@ Only **v1.4 and later are distributed as binaries**. The v1.0–v1.3 releases we
 
 ---
 
+## v1.6 — 2026-08-20
+
+- **Fixed the size scale being undersized.** The internal `size` value is a character's *body length*, not its drawn height — a mouse stands about 0.67× its `size`, a fox about 0.8×. v1.5 treated the two as the same thing, so every step was roughly a fifth smaller than its label claimed, and the curve itself was set too low. Steps now define the **drawn height** as a share of the screen, and the curve was raised: what used to be the maximum (10/10) is now around step 7, with three steps of headroom above it. The default step 5 is about 60% larger than v1.5's default.
+- **Loosened the crowding rule.** The combined-footprint budget went from 28% to 42% of the play area. At 28% the cap bound with only two or three critters on screen, so the top steps did nothing — the slider moved and the prey didn't. With many critters the top steps still compress, which is the point of the rule.
+- **Made the character picker legible.** The grid went from 4 columns to 3 with taller cells, and characters are now sized to fill the cell rather than drawn at a fixed fraction of it — roughly 53dp instead of 27dp on a common phone.
+
+---
+
 ## v1.5 — 2026-08-20
 
 - **Size is now measured against the screen instead of a fixed multiplier.** Each of the 10 steps defines the critter's size as a percentage of the screen's short edge (7% to 40% of screen height in landscape), so a given step looks the same on a small phone and on a tablet. Previously size was `character base size × multiplier`, which meant the same setting produced wildly different results across devices, and the multiplier numbers were misleading — a fox could not exceed 1.86× on a typical phone no matter how far the slider went, so the top steps did nothing.

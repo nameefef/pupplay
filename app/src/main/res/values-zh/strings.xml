@@ -163,6 +163,6 @@
     <string name="lang_system">跟随系统</string>
     <string name="lang_en">English</string>
     <string name="lang_zh">中文</string>
-    <string name="size_cap_hint">大小是按你的屏幕算的，不是固定数值，所以同一档在任何手机上看起来都一样大。第 5 档是按这块屏幕挑出来的甜点位，也是默认值。猎物数量多时会自动收小一点，场地不会被挤满。所有角色都是矢量绘制的，放到多大都不会糊。</string>
+    <string name="size_cap_hint">每一档定的是猎物画出来的高度占屏幕的比例，所以同一档在任何手机上都一样大。第 5 档是按屏幕挑的默认值。猎物数量多时高档位会被压缩，避免挤满场地——想要特别大就把数量调少。所有角色都是矢量绘制的，放到多大都不会糊。</string>
     <string name="footer_license">PupPlay · 依 AGPL-3.0 协议开源\n源码：github.com/nameefef/pupplay</string>
 </resources>

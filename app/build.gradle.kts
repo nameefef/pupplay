@@ -11,8 +11,8 @@ android {
         applicationId = "com.easonyin.dogplay"
         minSdk = 24
         targetSdk = 34
-        versionCode = 6
-        versionName = "1.5"
+        versionCode = 7
+        versionName = "1.6"
     }
 
     // 纯 Kotlin/Java 工程没有 native 库，三个包内容其实完全一致；

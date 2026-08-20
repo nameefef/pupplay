@@ -62,16 +62,19 @@ class PreyTile(
 
         // 预览跟着「大小」档位一起缩放，滑动时能直接看到效果
         // 预览跟着「大小」档位缩放；倍率压缩一下并封顶，免得画到格子外面
-        val vis = sizeRel().coerceIn(0.5f, 1.75f)
-        val s = minOf(w, h - 22f * dp) * 0.42f * vis
+        // 按可用宽高反推能画多大，让角色尽量铺满格子；
+        // 再按大小档位轻微缩放，滑动大小滑杆时预览也跟着动
+        val fit = minOf((w - 10f * dp) / 1.35f, (h - 30f * dp) / 1.05f)
+        val vis = (0.80f + 0.20f * ((sizeRel() - 1f) / 1.26f)).coerceIn(0.62f, 1f)
+        val s = fit * vis
         c.save()
-        c.translate(w / 2f, (h - 20f * dp) / 2f)
+        c.translate(w / 2f, (h - 26f * dp) / 2f)
         PreyRenderer.draw(c, p, type, s, 1.1f, custom())
         c.restore()
 
-        t.textSize = 11f * dp
+        t.textSize = 12f * dp
         t.color = if (picked) 0xFFFFE066.toInt() else Color.argb(190, 255, 255, 255)
-        c.drawText(context.getString(type.labelRes), w / 2f, h - 7f * dp, t)
+        c.drawText(context.getString(type.labelRes), w / 2f, h - 8f * dp, t)
     }
 }
 
