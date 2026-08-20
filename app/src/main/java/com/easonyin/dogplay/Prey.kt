@@ -37,11 +37,18 @@ class Prey(
     /** 「大乱斗」模式下，每次重生随机换一个角色 */
     var respawnType: (() -> PreyType)? = null
 
+    /**
+     * 实际尺寸：按倍率放大后再按屏幕短边封顶。
+     * 不封顶的话大倍率下留白会超过屏幕宽度，坐标算出来是负的，猎物会卡在角落。
+     */
+    private fun effectiveSize(w: Float, h: Float): Float =
+        (type.sizeDp * dp * sizeMul).coerceAtMost(minOf(w, h) * 0.42f)
+
     /** 生成新一轮的位置 */
     fun spawn(w: Float, h: Float) {
         respawnType?.invoke()?.let { type = it }
-        size = type.sizeDp * dp * sizeMul
-        val m = size
+        size = effectiveSize(w, h)
+        val m = size * 0.6f
         x = m + rnd.nextFloat() * (w - 2 * m)
         y = m + rnd.nextFloat() * (h - 2 * m)
         val a = rnd.nextFloat() * 6.2832f
@@ -82,7 +89,7 @@ class Prey(
     }
 
     private fun pickTarget(w: Float, h: Float) {
-        val m = size * 1.1f
+        val m = size * 0.7f
         // 老鼠、甲虫这类爱贴边跑；其他的满屏跑
         val edgeLover = type == PreyType.MOUSE || type == PreyType.BEETLE ||
                 type == PreyType.SPIDER || type == PreyType.CRAB
@@ -114,7 +121,7 @@ class Prey(
         if (scale < 1f) scale = (scale + dt * 4.5f).coerceAtMost(1f)
 
         val base = type.speedDp * dp * speedMul
-        val m = size
+        val m = size * 0.6f
 
         when (type.motion) {
             Motion.BOUNCE -> {

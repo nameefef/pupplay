@@ -299,7 +299,7 @@ class MainActivity : AppCompatActivity() {
             setPadding(0, pad(10), 0, 0)
         }
         wrap.addView(sizeLabel)
-        wrap.addView(seek(0, 4, prefs.size - 1) { v ->
+        wrap.addView(seek(0, 9, prefs.size - 1) { v ->
             prefs.size = v + 1
             sizeLabel?.text = getString(R.string.size_fmt, prefs.size, prefs.sizeLabel)
             preyTiles.forEach { it.invalidate() }

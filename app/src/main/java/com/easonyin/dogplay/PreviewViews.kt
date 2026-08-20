@@ -43,7 +43,9 @@ class PreyTile(
         p.style = Paint.Style.FILL
 
         // 预览跟着「大小」档位一起缩放，滑动时能直接看到效果
-        val s = minOf(w, h - 22f * dp) * 0.42f * sizeMul().coerceIn(0.5f, 1.9f)
+        // 预览跟着「大小」档位缩放；倍率压缩一下并封顶，免得画到格子外面
+        val vis = (1f + (sizeMul() - 1f) * 0.45f).coerceIn(0.55f, 1.6f)
+        val s = minOf(w, h - 22f * dp) * 0.42f * vis
         c.save()
         c.translate(w / 2f, (h - 20f * dp) / 2f)
         PreyRenderer.draw(c, p, type, s, 1.1f, custom())

@@ -26,20 +26,25 @@ class Prefs(private val ctx: Context) {
         get() = sp.getInt("count", 3).coerceIn(1, 10)
         set(v) = sp.edit().putInt("count", v.coerceIn(1, 10)).apply()
 
-    /** 猎物大小 1..5 */
+    /**
+     * 猎物大小 1..10。换了新 key，老版本存的 5 档值不会被误读成新档位。
+     * 默认 4 = 1.0 倍。
+     */
     var size: Int
-        get() = sp.getInt("size", 3).coerceIn(1, 5)
-        set(v) = sp.edit().putInt("size", v.coerceIn(1, 5)).apply()
+        get() = sp.getInt("size2", 4).coerceIn(1, 10)
+        set(v) = sp.edit().putInt("size2", v.coerceIn(1, 10)).apply()
 
-    /** 大小档位 -> 实际倍率 */
-    val sizeMul: Float get() = when (size) {
-        1 -> 0.6f; 2 -> 0.8f; 3 -> 1.0f; 4 -> 1.35f; else -> 1.8f
+    /** 大小档位 -> 实际倍率。上限做到 3.4 倍，小型犬也能一爪盖住。 */
+    val sizeMul: Float get() = SIZE_STEPS[size - 1]
+
+    val sizeLabel: String get() {
+        val base = SIZE_LABELS[size - 1]
+        return when (size) {
+            1 -> base + " · " + ctx.getString(R.string.size_smallest)
+            10 -> base + " · " + ctx.getString(R.string.size_biggest)
+            else -> base
+        }
     }
-
-    val sizeLabel: String get() = ctx.getString(when (size) {
-        1 -> R.string.size_1; 2 -> R.string.size_2; 3 -> R.string.size_3
-        4 -> R.string.size_4; else -> R.string.size_5
-    })
 
     /** 速度档位 -> 实际倍率 */
     val speedMul: Float get() = when (speed) {
@@ -144,4 +149,13 @@ class Prefs(private val ctx: Context) {
     }
 
     fun clearFile(f: File) { try { f.delete() } catch (e: Throwable) {} }
+
+    companion object {
+        private val SIZE_STEPS = floatArrayOf(
+            0.5f, 0.65f, 0.8f, 1.0f, 1.25f, 1.55f, 1.9f, 2.35f, 2.85f, 3.4f
+        )
+        private val SIZE_LABELS = arrayOf(
+            "0.5×", "0.65×", "0.8×", "1.0×", "1.25×", "1.55×", "1.9×", "2.35×", "2.85×", "3.4×"
+        )
+    }
 }

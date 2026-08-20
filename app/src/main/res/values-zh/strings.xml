@@ -159,13 +159,10 @@
     <string name="snd_miss">落空</string>
     <string name="snd_reward">奖励</string>
     <string name="size_fmt">大小：%1$d　%2$s</string>
-    <string name="size_1">很小</string>
-    <string name="size_2">小</string>
-    <string name="size_3">正常</string>
-    <string name="size_4">大</string>
-    <string name="size_5">很大 · 最好拍中</string>
     <string name="sec_lang">语言</string>
     <string name="lang_system">跟随系统</string>
     <string name="lang_en">English</string>
     <string name="lang_zh">中文</string>
+    <string name="size_smallest">最小</string>
+    <string name="size_biggest">最大 · 最好拍中</string>
 </resources>
