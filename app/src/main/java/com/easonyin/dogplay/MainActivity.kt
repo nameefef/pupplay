@@ -21,6 +21,8 @@ import android.widget.Toast
 import androidx.activity.result.contract.ActivityResultContracts
 import androidx.appcompat.app.AlertDialog
 import androidx.appcompat.app.AppCompatActivity
+import androidx.appcompat.app.AppCompatDelegate
+import androidx.core.os.LocaleListCompat
 import androidx.appcompat.widget.SwitchCompat
 import java.io.File
 
@@ -37,6 +39,7 @@ class MainActivity : AppCompatActivity() {
 
     private var speedLabel: TextView? = null
     private var countLabel: TextView? = null
+    private var sizeLabel: TextView? = null
     private var soundLabel: TextView? = null
     private var scoreLabel: TextView? = null
     private var preyStatus: TextView? = null
@@ -140,6 +143,9 @@ class MainActivity : AppCompatActivity() {
             setPadding(0, pad(6), 0, pad(14))
         })
 
+        col.addView(sectionTitle(getString(R.string.sec_lang)))
+        col.addView(langCard())
+
         col.addView(sectionTitle(getString(R.string.sec_prey)))
         col.addView(preySection())
 
@@ -167,6 +173,26 @@ class MainActivity : AppCompatActivity() {
         return scroll
     }
 
+    /** 应用内语言切换：不用改系统设置也能切成英文 */
+    private fun langCard(): View {
+        val wrap = card()
+        val tags = listOf("", "en", "zh")
+        val current = AppCompatDelegate.getApplicationLocales()
+            .toLanguageTags().substringBefore('-').lowercase()
+        val selected = tags.indexOfFirst { it.isNotEmpty() && it == current }.let { if (it < 0) 0 else it }
+        wrap.addView(segmented(
+            listOf(getString(R.string.lang_system), getString(R.string.lang_en), getString(R.string.lang_zh)),
+            selected
+        ) { i ->
+            AppCompatDelegate.setApplicationLocales(
+                if (tags[i].isEmpty()) LocaleListCompat.getEmptyLocaleList()
+                else LocaleListCompat.forLanguageTags(tags[i])
+            )
+            // 切换后系统会重建 Activity，界面立刻变成新语言
+        })
+        return wrap
+    }
+
     private fun preySection(): View {
         val wrap = card()
         for (g in Group.entries) {
@@ -182,7 +208,7 @@ class MainActivity : AppCompatActivity() {
             val tileW = (resources.displayMetrics.widthPixels - pad(32) - pad(24)) / cols
             val grid = GridLayout(this).apply { columnCount = cols }
             for (t in list) {
-                val tile = PreyTile(this, t) { customPreyBmp }
+                val tile = PreyTile(this, t, { customPreyBmp }, { prefs.sizeMul })
                 tile.picked = prefs.preyKey == t.key
                 tile.layoutParams = GridLayout.LayoutParams().apply {
                     width = tileW
@@ -266,6 +292,19 @@ class MainActivity : AppCompatActivity() {
             prefs.count = v + 1
             countLabel?.text = getString(R.string.count_fmt, prefs.count)
         })
+
+        sizeLabel = TextView(this).apply {
+            setTextColor(cText); textSize = 14f
+            text = getString(R.string.size_fmt, prefs.size, prefs.sizeLabel)
+            setPadding(0, pad(10), 0, 0)
+        }
+        wrap.addView(sizeLabel)
+        wrap.addView(seek(0, 4, prefs.size - 1) { v ->
+            prefs.size = v + 1
+            sizeLabel?.text = getString(R.string.size_fmt, prefs.size, prefs.sizeLabel)
+            preyTiles.forEach { it.invalidate() }
+        })
+
         wrap.addView(TextView(this).apply {
             text = getString(R.string.speed_hint)
             setTextColor(cDim); textSize = 11f

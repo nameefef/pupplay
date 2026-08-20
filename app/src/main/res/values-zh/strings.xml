@@ -5,7 +5,7 @@
     <string name="main_intro">把手机平放，让狗狗用鼻子或爪子拍屏幕。配色按狗的蓝—黄二色视觉调过，深色底最醒目。</string>
     <string name="sec_prey">选择猎物</string>
     <string name="sec_bg">游戏背景</string>
-    <string name="sec_speed">速度与数量</string>
+    <string name="sec_speed">速度 · 数量 · 大小</string>
     <string name="sec_sound">音效</string>
     <string name="sec_haptic">震动反馈</string>
     <string name="sec_custom">自定义素材</string>
@@ -14,7 +14,7 @@
     <string name="bg_hint">背景越暗，猎物越突出，狗狗越容易锁定。</string>
     <string name="speed_fmt">速度：%1$d　%2$s</string>
     <string name="count_fmt">同时出现：%1$d 只</string>
-    <string name="speed_hint">刚上手建议 2～3 只、速度 2～3 档；狗狗熟练了再加快加量。</string>
+    <string name="speed_hint">刚上手建议 2～3 只、速度 2～3 档；狗狗熟练了再加快加量。爪子拍不准的话把猎物调大一点。</string>
     <string name="speed_1">很慢 · 老狗/幼犬</string>
     <string name="speed_2">慢</string>
     <string name="speed_3">正常</string>
@@ -158,4 +158,14 @@
     <string name="snd_pop">啵</string>
     <string name="snd_miss">落空</string>
     <string name="snd_reward">奖励</string>
+    <string name="size_fmt">大小：%1$d　%2$s</string>
+    <string name="size_1">很小</string>
+    <string name="size_2">小</string>
+    <string name="size_3">正常</string>
+    <string name="size_4">大</string>
+    <string name="size_5">很大 · 最好拍中</string>
+    <string name="sec_lang">语言</string>
+    <string name="lang_system">跟随系统</string>
+    <string name="lang_en">English</string>
+    <string name="lang_zh">中文</string>
 </resources>

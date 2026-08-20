@@ -16,11 +16,12 @@ import kotlin.random.Random
 class Prey(
     var type: PreyType,
     private val dp: Float,
-    private val rnd: Random
+    private val rnd: Random,
+    private val sizeMul: Float = 1f
 ) {
     var x = 0f; var y = 0f
     var vx = 0f; var vy = 0f
-    var size = type.sizeDp * dp
+    var size = type.sizeDp * dp * sizeMul
 
     private var state = 0            // 0=停顿 1=奔跑 2=逃窜
     private var timer = 0f
@@ -39,7 +40,7 @@ class Prey(
     /** 生成新一轮的位置 */
     fun spawn(w: Float, h: Float) {
         respawnType?.invoke()?.let { type = it }
-        size = type.sizeDp * dp
+        size = type.sizeDp * dp * sizeMul
         val m = size
         x = m + rnd.nextFloat() * (w - 2 * m)
         y = m + rnd.nextFloat() * (h - 2 * m)

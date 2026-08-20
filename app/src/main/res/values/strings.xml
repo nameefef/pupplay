@@ -5,7 +5,7 @@
     <string name="main_intro">Lay the phone flat and let your dog paw or nose the screen. The palette is tuned for canine blue–yellow dichromatic vision — dark backgrounds stand out most.</string>
     <string name="sec_prey">Choose Prey</string>
     <string name="sec_bg">Background</string>
-    <string name="sec_speed">Speed &amp; Count</string>
+    <string name="sec_speed">Speed, Count &amp; Size</string>
     <string name="sec_sound">Sound</string>
     <string name="sec_haptic">Haptics</string>
     <string name="sec_custom">Custom Assets</string>
@@ -14,7 +14,7 @@
     <string name="bg_hint">The darker the background, the easier it is for your dog to lock on.</string>
     <string name="speed_fmt">Speed: %1$d　%2$s</string>
     <string name="count_fmt">On screen: %1$d</string>
-    <string name="speed_hint">Start with 2–3 critters at speed 2–3; ramp up once your dog gets the hang of it.</string>
+    <string name="speed_hint">Start with 2–3 critters at speed 2–3; ramp up once your dog gets the hang of it. Bigger prey is easier for clumsy paws.</string>
     <string name="speed_1">Very slow · senior/puppy</string>
     <string name="speed_2">Slow</string>
     <string name="speed_3">Normal</string>
@@ -158,4 +158,14 @@
     <string name="snd_pop">Pop</string>
     <string name="snd_miss">Miss</string>
     <string name="snd_reward">Reward</string>
+    <string name="size_fmt">Size: %1$d　%2$s</string>
+    <string name="size_1">Tiny</string>
+    <string name="size_2">Small</string>
+    <string name="size_3">Normal</string>
+    <string name="size_4">Big</string>
+    <string name="size_5">Huge · easiest to hit</string>
+    <string name="sec_lang">Language</string>
+    <string name="lang_system">Follow system</string>
+    <string name="lang_en">English</string>
+    <string name="lang_zh">中文</string>
 </resources>

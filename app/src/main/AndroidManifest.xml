@@ -31,6 +31,17 @@
             android:excludeFromRecents="false"
             android:configChanges="orientation|screenSize|keyboardHidden|uiMode|smallestScreenSize|screenLayout"
             android:theme="@style/Theme.DogPlay.Fullscreen" />
+
+        <!-- Android 13 以下由 AppCompat 自己保存「应用内语言」选择 -->
+        <service
+            android:name="androidx.appcompat.app.AppLocalesMetadataHolderService"
+            android:enabled="false"
+            android:exported="false">
+            <meta-data
+                android:name="autoStoreLocales"
+                android:value="true" />
+        </service>
+
     </application>
 
 </manifest>

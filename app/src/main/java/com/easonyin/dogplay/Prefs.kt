@@ -26,6 +26,21 @@ class Prefs(private val ctx: Context) {
         get() = sp.getInt("count", 3).coerceIn(1, 10)
         set(v) = sp.edit().putInt("count", v.coerceIn(1, 10)).apply()
 
+    /** 猎物大小 1..5 */
+    var size: Int
+        get() = sp.getInt("size", 3).coerceIn(1, 5)
+        set(v) = sp.edit().putInt("size", v.coerceIn(1, 5)).apply()
+
+    /** 大小档位 -> 实际倍率 */
+    val sizeMul: Float get() = when (size) {
+        1 -> 0.6f; 2 -> 0.8f; 3 -> 1.0f; 4 -> 1.35f; else -> 1.8f
+    }
+
+    val sizeLabel: String get() = ctx.getString(when (size) {
+        1 -> R.string.size_1; 2 -> R.string.size_2; 3 -> R.string.size_3
+        4 -> R.string.size_4; else -> R.string.size_5
+    })
+
     /** 速度档位 -> 实际倍率 */
     val speedMul: Float get() = when (speed) {
         1 -> 0.45f; 2 -> 0.7f; 3 -> 1.0f; 4 -> 1.45f; else -> 2.0f

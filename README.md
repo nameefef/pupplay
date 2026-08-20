@@ -4,7 +4,7 @@
 
 A touchscreen hunting game for dogs. Lay your phone flat on the floor and let your dog paw or nose at the critters darting across the screen — every catch gets a sound and a haptic buzz.
 
-The UI follows your system language (English / Chinese).
+The UI is available in English and Chinese — it follows your system language, and there is an in-app switcher if you want to override it.
 
 ## Features
 
@@ -14,7 +14,7 @@ The UI follows your system language (English / Chinese).
   - Toys & lights: **red dot**, green laser, blue dot, tennis ball, frisbee, bone, rope toy, bubble, star, feather
   - Plus **Mixed** (every critter re-rolls its character) and **Custom image**
 - **9 built-in backgrounds**: pure dark, grass, starry sky, snow, wood floor, carpet, beach, blue sky, forest — plus your own photo
-- **5 speed settings, 1–10 critters** on screen at once
+- **5 speed settings, 1–10 critters** on screen at once, and **5 size levels** — scale prey up for clumsy paws or down for precise little dogs
 - **28 procedurally synthesised sounds** — catches and misses sound different. Pin one sound, or import your own audio file.
 - **Haptic feedback**: a double tap on a catch, a light tick on a miss, a triple buzz every 10 in a row. Three strength levels.
 - **Exit protection**: the back button and back gesture are both swallowed. To quit, you must hold the small circle in the top-left corner for 2/3/5 seconds (configurable).

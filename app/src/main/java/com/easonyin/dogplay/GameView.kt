@@ -129,7 +129,7 @@ class GameView(ctx: Context, private val prefs: Prefs) : View(ctx) {
         val mixed = prefs.prey == PreyType.MIXED
         repeat(prefs.count) {
             val t = if (mixed) PreyType.playable.random(rnd) else prefs.prey
-            val p = Prey(t, dp, rnd)
+            val p = Prey(t, dp, rnd, prefs.sizeMul)
             if (mixed) p.respawnType = { PreyType.playable.random(rnd) }
             p.spawn(w, h)
             preyList.add(p)

@@ -10,7 +10,12 @@ import android.graphics.Typeface
 import android.view.View
 
 /** 角色选择格子：直接用游戏里的同一套画法渲染预览 */
-class PreyTile(ctx: Context, val type: PreyType, private val custom: () -> Bitmap?) : View(ctx) {
+class PreyTile(
+    ctx: Context,
+    val type: PreyType,
+    private val custom: () -> Bitmap?,
+    private val sizeMul: () -> Float = { 1f }
+) : View(ctx) {
 
     private val dp = resources.displayMetrics.density
     private val p = Paint(Paint.ANTI_ALIAS_FLAG)
@@ -37,7 +42,8 @@ class PreyTile(ctx: Context, val type: PreyType, private val custom: () -> Bitma
         c.drawRoundRect(r, 14f * dp, 14f * dp, p)
         p.style = Paint.Style.FILL
 
-        val s = minOf(w, h - 22f * dp) * 0.52f
+        // 预览跟着「大小」档位一起缩放，滑动时能直接看到效果
+        val s = minOf(w, h - 22f * dp) * 0.42f * sizeMul().coerceIn(0.5f, 1.9f)
         c.save()
         c.translate(w / 2f, (h - 20f * dp) / 2f)
         PreyRenderer.draw(c, p, type, s, 1.1f, custom())
