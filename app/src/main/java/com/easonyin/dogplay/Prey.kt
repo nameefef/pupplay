@@ -35,8 +35,8 @@ class Prey(
     var type: PreyType,
     private val dp: Float,
     private val rnd: Random,
-    /** 猎物「画出来的高度」占屏幕短边的比例，见 Prefs.sizeFraction */
-    private val sizeFraction: Float = 0.18f,
+    /** 目标绘制高度（像素），由毫米换算而来，见 GameView.targetHeightPx */
+    private val targetHeightPx: Float = 60f,
     /** 数量多时的额外收敛上限（像素）。见 GameView.sizeCap */
     private val maxSize: Float = Float.MAX_VALUE
 ) {
@@ -62,8 +62,12 @@ class Prey(
      * 实际尺寸完全由屏幕决定：短边 × 档位比例 × 角色的体型系数。
      * 这样同一档在任何手机上看起来都一样大，也天然不会超出屏幕。
      */
-    private fun effectiveSize(w: Float, h: Float): Float =
-        (minOf(w, h) * sizeFraction / SPRITE_HEIGHT * bodyRatio()).coerceAtMost(maxSize)
+    private fun effectiveSize(w: Float, h: Float): Float {
+        val want = targetHeightPx / SPRITE_HEIGHT * bodyRatio()
+        // 物理尺寸优先，但再大也不能超过屏幕短边的 68%，否则没地方跑
+        val byScreen = minOf(w, h) * 0.68f / SPRITE_HEIGHT
+        return want.coerceAtMost(minOf(maxSize, byScreen))
+    }
 
     /**
      * 体型系数：保留「狐狸比老鼠大」的差别，但把差距收窄到 0.75~1.25 倍，

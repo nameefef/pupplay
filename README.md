@@ -14,7 +14,7 @@ The UI is available in English and Chinese — it follows your system language, 
   - Toys & lights: **red dot**, green laser, blue dot, tennis ball, frisbee, bone, rope toy, bubble, star, feather
   - Plus **Mixed** (every critter re-rolls its character) and **Custom image**
 - **9 built-in backgrounds**: pure dark, grass, starry sky, snow, wood floor, carpet, beach, blue sky, forest — plus your own photo
-- **5 speed settings, 1–10 critters** on screen at once, and **10 size levels measured against your screen** (9%–52% of screen height) rather than a fixed multiplier, so a given step looks the same on any phone. Step 5 is the fitted default; the top steps compress when many critters are on screen at once
+- **5 speed settings, 1–10 critters** on screen at once, and **10 size levels set in real millimetres** (10–55mm of drawn height) rather than a screen proportion, because a dog's paw is a fixed physical size. The default 36mm is about a medium dog's paw pad; the top steps compress when many critters are on screen at once
 - **28 procedurally synthesised sounds** — catches and misses sound different. Pin one sound, or import your own audio file.
 - **Haptic feedback**: a double tap on a catch, a light tick on a miss, a triple buzz every 10 in a row. Three strength levels.
 - **Exit protection**: the back button and back gesture are both swallowed. To quit, you must hold the small circle in the top-left corner for 2/3/5 seconds (configurable).

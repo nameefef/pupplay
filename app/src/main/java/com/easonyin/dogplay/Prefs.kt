@@ -45,25 +45,28 @@ class Prefs(private val ctx: Context) {
         set(v) = sp.edit().putInt("count", v.coerceIn(1, 10)).apply()
 
     /**
-     * 猎物大小 1..10。第 5 档是按屏幕自动算出来的「最合适」大小，也是默认值。
-     * 又换了一次 key：档位含义从「倍率」变成了「占屏幕短边的比例」，老值不能沿用。
+     * 猎物大小 1..10，单位是毫米（猎物画出来的实际物理高度）。
+     * 默认第 7 档 = 36mm，接近中型犬肉垫的宽度。
+     * 又换 key：档位含义从「占屏幕比例」变成了「毫米」。
      */
     var size: Int
-        get() = sp.getInt("size3", 5).coerceIn(1, 10)
-        set(v) = sp.edit().putInt("size3", v.coerceIn(1, 10)).apply()
+        get() = sp.getInt("size4", 7).coerceIn(1, 10)
+        set(v) = sp.edit().putInt("size4", v.coerceIn(1, 10)).apply()
 
     /**
-     * 档位 -> 猎物占屏幕短边（横屏时就是屏幕高度）的比例。
-     * 不再用「角色基准 × 倍率」，因为那个数字跟屏幕无关，
-     * 同一个倍率在小屏上占半个屏幕、在平板上小得看不见。
+     * 档位 -> 猎物画出来的高度，单位毫米。
+     *
+     * 为什么用物理尺寸而不是屏幕比例：狗爪子的大小是固定的，中型犬肉垫约 35~45mm。
+     * 手机横屏时屏幕高度才 65~71mm，按比例算的话怎么调都比爪子小；
+     * 平板屏幕高 141mm，同样的比例又会大得离谱。只有毫米是跨设备一致的。
      */
-    val sizeFraction: Float get() = SIZE_FRACTIONS[size - 1]
+    val sizeMm: Float get() = SIZE_MM[size - 1]
 
-    /** 给界面显示用的百分比 */
-    val sizePercent: Int get() = Math.round(sizeFraction * 100f)
+    /** 给界面显示用 */
+    val sizeMmLabel: Int get() = Math.round(sizeMm)
 
-    /** 相对中间档的缩放，菜单预览格子用 */
-    val sizeRelative: Float get() = sizeFraction / SIZE_FRACTIONS[4]
+    /** 相对默认档的缩放，菜单预览格子用 */
+    val sizeRelative: Float get() = sizeMm / SIZE_MM[6]
 
     /** 速度档位 -> 实际倍率 */
     val speedMul: Float get() = when (speed) {
@@ -170,14 +173,9 @@ class Prefs(private val ctx: Context) {
     fun clearFile(f: File) { try { f.delete() } catch (e: Throwable) {} }
 
     companion object {
-        /**
-          * 每一档猎物「画出来的高度」占屏幕短边的比例 —— 是视觉高度，不是内部的 size 值。
-          * 内部 size 指的是身体长度，角色实际高度大约只有它的 0.8 倍，
-          * 之前直接拿 size 当高度用，等于虚标了两成，所以怎么调都嫌小。
-          * 第 5 档 0.23 大致相当于旧版拉满时的观感，上面还留了 5 档余量。
-          */
-        private val SIZE_FRACTIONS = floatArrayOf(
-            0.09f, 0.115f, 0.15f, 0.185f, 0.23f, 0.28f, 0.335f, 0.39f, 0.455f, 0.52f
+        /** 每一档猎物画出来的高度，单位毫米。第 7 档 36mm 是默认值。 */
+        private val SIZE_MM = floatArrayOf(
+            10f, 13f, 16f, 20f, 25f, 30f, 36f, 42f, 48f, 55f
         )
     }
 }

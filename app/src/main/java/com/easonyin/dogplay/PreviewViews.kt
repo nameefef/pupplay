@@ -65,7 +65,7 @@ class PreyTile(
         // 按可用宽高反推能画多大，让角色尽量铺满格子；
         // 再按大小档位轻微缩放，滑动大小滑杆时预览也跟着动
         val fit = minOf((w - 10f * dp) / 1.35f, (h - 30f * dp) / 1.05f)
-        val vis = (0.80f + 0.20f * ((sizeRel() - 1f) / 1.26f)).coerceIn(0.62f, 1f)
+        val vis = (0.82f + 0.18f * ((sizeRel() - 1f) / 0.53f)).coerceIn(0.62f, 1f)
         val s = fit * vis
         c.save()
         c.translate(w / 2f, (h - 26f * dp) / 2f)

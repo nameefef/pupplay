@@ -6,6 +6,14 @@ Only **v1.4 and later are distributed as binaries**. The v1.0–v1.3 releases we
 
 ---
 
+## v1.7 — 2026-08-20
+
+- **Size is now set in real millimetres, not as a share of the screen.** A dog's paw is a fixed physical size — a medium dog's paw pad is 35–45mm wide — but a phone in landscape is only 65–71mm tall, while a 10.5" tablet is 141mm. Any screen-proportional scale is therefore wrong on at least one of them: v1.6's default worked out to 21mm on a phone, smaller than a small dog's paw pad, which is why the slider had to be pushed to maximum to feel right.
+- Steps now run 10mm to 55mm of drawn height, measured with the display's physical density (`xdpi`/`ydpi`, falling back to `densityDpi` where a device reports nonsense). **The default is step 7 at 36mm**, about a medium dog's paw pad. Drawn size is still bounded at 68% of the screen's short edge, so the top steps clamp on small phones.
+- Fixed unescaped apostrophes in the English strings, which broke the resource build.
+
+---
+
 ## v1.6 — 2026-08-20
 
 - **Fixed the size scale being undersized.** The internal `size` value is a character's *body length*, not its drawn height — a mouse stands about 0.67× its `size`, a fox about 0.8×. v1.5 treated the two as the same thing, so every step was roughly a fifth smaller than its label claimed, and the curve itself was set too low. Steps now define the **drawn height** as a share of the screen, and the curve was raised: what used to be the maximum (10/10) is now around step 7, with three steps of headroom above it. The default step 5 is about 60% larger than v1.5's default.

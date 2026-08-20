@@ -158,11 +158,11 @@
     <string name="snd_pop">Pop</string>
     <string name="snd_miss">Miss</string>
     <string name="snd_reward">Reward</string>
-    <string name="size_fmt">Size: %1$d/10　·　%2$d%% of screen height</string>
+    <string name="size_fmt">Size: %1$d/10　·　about %2$dmm tall</string>
     <string name="sec_lang">Language</string>
     <string name="lang_system">Follow system</string>
     <string name="lang_en">English</string>
     <string name="lang_zh">中文</string>
-    <string name="size_cap_hint">Each step sets how tall a critter is drawn as a share of your screen, so a step looks the same on any phone. Step 5 is the fitted default. With many critters at once the top steps compress, so the field never gets swamped — drop the count if you want them really big. Everything is drawn as vectors and stays razor sharp at any size.</string>
+    <string name="size_cap_hint">Size is set in real millimetres, not as a share of the screen — a dog\'s paw is a fixed physical size, so this is the only measure that holds across phones and tablets. The default 36mm is about the width of a medium dog\'s paw pad. The top steps compress when many critters share the screen; drop the count if you want them really big.</string>
     <string name="footer_license">PupPlay · Free software under AGPL-3.0\nSource: github.com/nameefef/pupplay</string>
 </resources>

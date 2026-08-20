@@ -39,6 +39,17 @@ class GameView(ctx: Context, private val prefs: Prefs) : View(ctx) {
     var onExit: ((Int, Int) -> Unit)? = null
 
     private val dp = resources.displayMetrics.density
+
+    /**
+     * 每毫米多少像素。优先用 xdpi/ydpi（真实物理密度），
+     * 但不少设备这两个值是瞎报的，超出合理范围就退回 densityDpi。
+     */
+    private val mmPx: Float = run {
+        val m = resources.displayMetrics
+        val real = listOf(m.xdpi, m.ydpi).filter { it in 100f..900f }
+        val dpi = if (real.isEmpty()) m.densityDpi.toFloat() else real.average().toFloat()
+        dpi / 25.4f
+    }
     private val rnd = Random(System.nanoTime())
     private val paint = Paint(Paint.ANTI_ALIAS_FLAG)
     private val text = Paint(Paint.ANTI_ALIAS_FLAG).apply {
@@ -160,7 +171,7 @@ class GameView(ctx: Context, private val prefs: Prefs) : View(ctx) {
         val cap = sizeCap(w, h)
         repeat(prefs.count) {
             val t = if (mixed) PreyType.playable.random(rnd) else prefs.prey
-            val p = Prey(t, dp, rnd, prefs.sizeFraction, cap)
+            val p = Prey(t, dp, rnd, prefs.sizeMm * mmPx, cap)
             if (mixed) p.respawnType = { PreyType.playable.random(rnd) }
             p.spawn(w, h)
             preyList.add(p)
