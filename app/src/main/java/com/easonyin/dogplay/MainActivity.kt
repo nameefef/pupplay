@@ -52,6 +52,9 @@ class MainActivity : AppCompatActivity() {
 
     private val dp get() = resources.displayMetrics.density
 
+    /** 菜单是竖屏，但短边和游戏里横屏的短边是同一条，所以毫米数一致 */
+    private val shortEdgeMm get() = Screen.shortEdgeMm(resources)
+
     private val preyTiles = ArrayList<PreyTile>()
     private val bgTiles = ArrayList<BgTile>()
 
@@ -323,13 +326,13 @@ class MainActivity : AppCompatActivity() {
 
         sizeLabel = TextView(this).apply {
             setTextColor(cText); textSize = 14f
-            text = getString(R.string.size_fmt, prefs.size, prefs.sizeMmLabel)
+            text = getString(R.string.size_fmt, prefs.size, prefs.sizeMmLabel(shortEdgeMm))
             setPadding(0, pad(10), 0, 0)
         }
         wrap.addView(sizeLabel)
         wrap.addView(seek(0, 9, prefs.size - 1) { v ->
             prefs.size = v + 1
-            sizeLabel?.text = getString(R.string.size_fmt, prefs.size, prefs.sizeMmLabel)
+            sizeLabel?.text = getString(R.string.size_fmt, prefs.size, prefs.sizeMmLabel(shortEdgeMm))
             preyTiles.forEach { it.invalidate() }
         })
         wrap.addView(TextView(this).apply {

@@ -64,8 +64,10 @@ class Prey(
      */
     private fun effectiveSize(w: Float, h: Float): Float {
         val want = targetHeightPx / SPRITE_HEIGHT * bodyRatio()
-        // 物理尺寸优先，但再大也不能超过屏幕短边的 68%，否则没地方跑
-        val byScreen = minOf(w, h) * 0.68f / SPRITE_HEIGHT
+        // 45% 可玩上限必须加在体型系数「之后」：
+        // 毫米那层定的是中等体型的高度，狐狸这类大体型还会再乘 1.25，
+        // 只在毫米那层封顶的话大角色会突破上限，把场地占死。
+        val byScreen = minOf(w, h) * 0.45f / SPRITE_HEIGHT
         return want.coerceAtMost(minOf(maxSize, byScreen))
     }
 
@@ -84,11 +86,12 @@ class Prey(
         minOf(size * SPRITE_HEIGHT * 0.55f * k, h * 0.45f)
 
     /**
-     * 体型系数：保留「狐狸比老鼠大」的差别，但把差距收窄到 0.75~1.25 倍，
-     * 否则大体型角色会在低档位就顶满屏幕，小角色在高档位又还是很小。
+     * 体型系数：保留「狐狸比老鼠大」的差别，但差距收窄到 0.85~1.15 倍。
+     * 收得越窄，大体型角色越晚碰到 45% 的可玩上限，能用的档位就越多 ——
+     * 1.25 时狐狸在手机上第 5 档就顶格了，往上六档全是死档。
      */
     private fun bodyRatio(): Float =
-        (type.sizeDp / 44f).coerceIn(0.75f, 1.25f)
+        (type.sizeDp / 44f).coerceIn(0.85f, 1.15f)
 
     /** 生成新一轮的位置 */
     fun spawn(w: Float, h: Float) {

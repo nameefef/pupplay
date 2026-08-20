@@ -6,6 +6,19 @@ Only **v1.4 and later are distributed as binaries**. The v1.0–v1.3 releases we
 
 ---
 
+## v1.9 — 2026-08-20
+
+- **The size range is now derived from the screen and bounded by two hard limits**, instead of a fixed millimetre table that was the same everywhere.
+  - **Floor: 18mm — the dog has to be able to see it.** Canine acuity is about 20/75, giving a minimum resolvable angle of 3.75 arcminutes. A dog watching a phone on the floor is 30–60cm away (it cannot focus closer than about 33cm), and making out a shape takes roughly 30 resolvable units — 20mm at 60cm, 18mm at 55cm. Below that a dog only sees that something is moving, not what it is.
+  - **Ceiling: 45% of the screen's short edge — the dog has to be able to play.** Prey that fills the field has nowhere to run, and running is what triggers the chase, not size. Absolute cap of 70mm so a large tablet does not produce something absurd.
+  - The ten steps interpolate geometrically between the two. A phone's short edge is only 65–71mm, so it physically cannot fit paw-sized prey *and* room to run; playability wins there. A tablet has room for both and the range widens on its own — 18–63mm instead of 18–32mm.
+- **The playability ceiling is applied after the body-size coefficient**, not before it. Applying it to the nominal millimetre value let larger characters multiply past the limit — a fox came out at 55% of screen height with only 39% of the field left to move in.
+- **Body-size coefficients narrowed from 0.75–1.25 to 0.85–1.15.** A wider spread made large characters hit the ceiling at step 5, leaving six dead steps above it; they now reach it at step 7. The narrower floor also lifts the smallest characters, like the red dot, to a size a dog can actually resolve.
+- Physical-density handling moved into a shared `Screen` helper so the menu and the game derive sizes from exactly the same numbers.
+- Dropped three rounds of accumulated comments in the picker preview, one of which described a mechanism that no longer exists.
+
+---
+
 ## v1.8 — 2026-08-20
 
 **Fixes a crash that hits on the default settings — upgrade from v1.6 or v1.7.**

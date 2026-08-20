@@ -158,11 +158,11 @@
     <string name="snd_pop">Pop</string>
     <string name="snd_miss">Miss</string>
     <string name="snd_reward">Reward</string>
-    <string name="size_fmt">Size: %1$d/10　·　about %2$dmm tall</string>
+    <string name="size_fmt">Size: %1$d/10　·　%2$dmm tall</string>
     <string name="sec_lang">Language</string>
     <string name="lang_system">Follow system</string>
     <string name="lang_en">English</string>
     <string name="lang_zh">中文</string>
-    <string name="size_cap_hint">Size is set in real millimetres, not as a share of the screen — a dog\'s paw is a fixed physical size, so this is the only measure that holds across phones and tablets. The default 36mm is about the width of a medium dog\'s paw pad. The top steps compress when many critters share the screen; drop the count if you want them really big.</string>
+    <string name="size_cap_hint">The range is derived from your screen and bounded by two hard limits. The smallest step is 18mm, below which a dog can no longer make out the shape — canine acuity is about 20/75, and a dog watching a phone on the floor is 30–60cm away. The largest step is 45% of your screen\'s short edge, because prey that fills the field has nowhere to run, and running is what triggers the chase. A phone simply cannot fit paw-sized prey and room to run at the same time, so playability wins; a tablet has room for both and the range widens automatically.</string>
     <string name="footer_license">PupPlay · Free software under AGPL-3.0\nSource: github.com/nameefef/pupplay</string>
 </resources>

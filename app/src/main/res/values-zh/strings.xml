@@ -158,11 +158,11 @@
     <string name="snd_pop">啵</string>
     <string name="snd_miss">落空</string>
     <string name="snd_reward">奖励</string>
-    <string name="size_fmt">大小：%1$d/10　·　约 %2$dmm 高</string>
+    <string name="size_fmt">大小：%1$d/10　·　%2$dmm 高</string>
     <string name="sec_lang">语言</string>
     <string name="lang_system">跟随系统</string>
     <string name="lang_en">English</string>
     <string name="lang_zh">中文</string>
-    <string name="size_cap_hint">大小用的是真实毫米数，不是屏幕比例——狗爪子的大小是固定的，只有物理尺寸在手机和平板上才通用。默认 36mm 接近中型犬肉垫的宽度。猎物数量多时高档位会被压缩，想要特别大就把数量调少。</string>
+    <string name="size_cap_hint">档位区间是按你的屏幕算出来的，两端各有一条硬约束。最小 18mm，再小狗就分辨不出形状了——犬类视敏度约 20/75，趴着看地上的手机视距 30~60cm。最大是屏幕短边的 45%，因为猎物占满场地就没地方跑，而奔跑本身才是勾起捕猎欲的关键。手机屏幕物理上放不下「爪垫大小 + 还有地方跑」，只能让位给可玩性；平板放得下，区间会自动拉宽。</string>
     <string name="footer_license">PupPlay · 依 AGPL-3.0 协议开源\n源码：github.com/nameefef/pupplay</string>
 </resources>

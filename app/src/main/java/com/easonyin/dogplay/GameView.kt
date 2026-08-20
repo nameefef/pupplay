@@ -44,19 +44,8 @@ class GameView(ctx: Context, private val prefs: Prefs) : View(ctx) {
      * 每毫米多少像素。优先用 xdpi/ydpi（真实物理密度），
      * 但不少设备这两个值是瞎报的，超出合理范围就退回 densityDpi。
      */
-    private val mmPx: Float = run {
-        val m = resources.displayMetrics
-        val fallback = m.densityDpi.toFloat()
-        val x = m.xdpi
-        val y = m.ydpi
-        val sane = x in 100f..900f && y in 100f..900f
-        // 有些机型只有一个轴报真实密度、另一个轴报分桶后的 densityDpi
-        // （比如 xdpi=160、ydpi=440）。这时取平均会得到一个两边都不对的值，
-        // 不如整体退回 densityDpi。
-        val agree = sane && kotlin.math.abs(x - y) <= 0.25f * maxOf(x, y)
-        val dpi = if (agree) (x + y) / 2f else fallback
-        dpi / 25.4f
-    }
+    private val mmPx: Float = Screen.mmPx(resources)
+    private val shortEdgeMm: Float = Screen.shortEdgeMm(resources)
     private val rnd = Random(System.nanoTime())
     private val paint = Paint(Paint.ANTI_ALIAS_FLAG)
     private val text = Paint(Paint.ANTI_ALIAS_FLAG).apply {
@@ -178,7 +167,7 @@ class GameView(ctx: Context, private val prefs: Prefs) : View(ctx) {
         val cap = sizeCap(w, h)
         repeat(prefs.count) {
             val t = if (mixed) PreyType.playable.random(rnd) else prefs.prey
-            val p = Prey(t, dp, rnd, prefs.sizeMm * mmPx, cap)
+            val p = Prey(t, dp, rnd, prefs.sizeMm(shortEdgeMm) * mmPx, cap)
             if (mixed) p.respawnType = { PreyType.playable.random(rnd) }
             p.spawn(w, h)
             preyList.add(p)

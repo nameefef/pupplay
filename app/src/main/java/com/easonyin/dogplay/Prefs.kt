@@ -45,27 +45,39 @@ class Prefs(private val ctx: Context) {
         set(v) = sp.edit().putInt("count", v.coerceIn(1, 10)).apply()
 
     /**
-     * 猎物大小 1..10，单位是毫米（猎物画出来的实际物理高度）。
-     * 默认第 7 档 = 36mm，接近中型犬肉垫的宽度。
-     * 又换 key：档位含义从「占屏幕比例」变成了「毫米」。
+     * 猎物大小档位 1..10。具体多少毫米由屏幕算出来，见 [sizeMm]。
+     * 默认第 8 档，偏大但仍留得下跑动空间。
      */
     var size: Int
-        get() = sp.getInt("size4", 7).coerceIn(1, 10)
-        set(v) = sp.edit().putInt("size4", v.coerceIn(1, 10)).apply()
+        get() = sp.getInt("size5", 8).coerceIn(1, 10)
+        set(v) = sp.edit().putInt("size5", v.coerceIn(1, 10)).apply()
 
     /**
-     * 档位 -> 猎物画出来的高度，单位毫米。
+     * 档位 -> 猎物画出来的高度（毫米），区间两端都是有依据的硬约束：
      *
-     * 为什么用物理尺寸而不是屏幕比例：狗爪子的大小是固定的，中型犬肉垫约 35~45mm。
-     * 手机横屏时屏幕高度才 65~71mm，按比例算的话怎么调都比爪子小；
-     * 平板屏幕高 141mm，同样的比例又会大得离谱。只有毫米是跨设备一致的。
+     * **下限 18mm —— 狗要看得清。** 犬类视敏度约 20/75，最小可分辨视角 3.75 弧分。
+     * 狗趴着看地上的手机视距 30~60cm（近于 33cm 根本对不上焦），
+     * 要分辨出形状大约需要 30 个可分辨单元，60cm 处即 20mm、55cm 处即 18mm。
+     * 再小狗就只看得见「有东西在动」，认不出是什么。
+     *
+     * **上限 屏幕短边的 45% —— 狗要玩得起来。** 猎物占满场地就没地方跑，
+     * 而奔跑本身才是勾起捕猎欲的关键，不是大小。另外绝对不超过 70mm，
+     * 免得在大平板上大到荒谬。
+     *
+     * 中间等比展开。所以同一档在不同设备上毫米数不同 —— 这是有意的：
+     * 手机屏幕短边只有 65~71mm，物理上放不下「爪垫大小 + 还有地方跑」，
+     * 必须让位给可玩性；平板放得下，区间就自动拉宽。
      */
-    val sizeMm: Float get() = SIZE_MM[size - 1]
+    fun sizeMm(shortEdgeMm: Float): Float {
+        val lo = MIN_VISIBLE_MM
+        val hi = minOf(shortEdgeMm * PLAYABLE_FRACTION, MAX_MM).coerceAtLeast(lo * 1.15f)
+        val t = (size - 1) / 9f
+        return lo * Math.pow((hi / lo).toDouble(), t.toDouble()).toFloat()
+    }
 
-    /** 给界面显示用 */
-    val sizeMmLabel: Int get() = Math.round(sizeMm)
+    fun sizeMmLabel(shortEdgeMm: Float): Int = Math.round(sizeMm(shortEdgeMm))
 
-    /** 档位归一到 0~1，菜单预览格子用；改档位表也不会失配 */
+    /** 档位归一到 0~1，菜单预览格子用；改档位区间也不会失配 */
     val sizeNorm: Float get() = (size - 1) / 9f
 
     /** 速度档位 -> 实际倍率 */
@@ -173,9 +185,13 @@ class Prefs(private val ctx: Context) {
     fun clearFile(f: File) { try { f.delete() } catch (e: Throwable) {} }
 
     companion object {
-        /** 每一档猎物画出来的高度，单位毫米。第 7 档 36mm 是默认值。 */
-        private val SIZE_MM = floatArrayOf(
-            10f, 13f, 16f, 20f, 25f, 30f, 36f, 42f, 48f, 55f
-        )
+        /** 狗能看清形状的下限（毫米），依据见 [sizeMm] */
+        private const val MIN_VISIBLE_MM = 18f
+
+        /** 猎物最多占屏幕短边的多少，超过就没地方跑了 */
+        private const val PLAYABLE_FRACTION = 0.45f
+
+        /** 绝对上限，防止大平板上大到荒谬 */
+        private const val MAX_MM = 70f
     }
 }
