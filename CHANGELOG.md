@@ -6,6 +6,16 @@ Only **v1.4 and later are distributed as binaries**. The v1.0–v1.3 releases we
 
 ---
 
+## v1.8 — 2026-08-20
+
+**Fixes a crash that hits on the default settings — upgrade from v1.6 or v1.7.**
+
+- **Missing a tap near any critter crashed the app.** Prey kept a margin of one full `size` from every screen edge, but `size` is the character's body *length*: the horizontal half-width is about 0.65×size while the vertical half-height is only about 0.4×size, so the vertical margin was over-reserved by more than half again. Once prey grew past half the screen height, `h - 2×size` went negative and `coerceIn(size, h - size)` threw `IllegalArgumentException` straight out of the touch handler. On a 1080×2400 phone at the v1.7 default of 36mm, every character exceeded that threshold, and `startle()` runs for every critter within 3.4 hit radii of the tap — which at that size is essentially the whole screen. Margins are now computed per axis and hard-bounded at 45% of each dimension, so the usable area is positive at any size. v1.5 and earlier were not affected; sizes never grew large enough to reach it.
+- **Physical density is no longer averaged across disagreeing axes.** Some devices report a real density on one axis and the bucketed `densityDpi` on the other (`xdpi=160`, `ydpi=440`); averaging those produced a value wrong for both. The two axes must now agree within 25% or the reading is discarded for `densityDpi`.
+- **The lowest size steps looked identical in the character picker.** The preview scale bottomed out against its own clamp for steps 1–3. It is now derived from the step number directly, so every step is visibly different, and changing the size table cannot silently break it.
+
+---
+
 ## v1.7 — 2026-08-20
 
 - **Size is now set in real millimetres, not as a share of the screen.** A dog's paw is a fixed physical size — a medium dog's paw pad is 35–45mm wide — but a phone in landscape is only 65–71mm tall, while a 10.5" tablet is 141mm. Any screen-proportional scale is therefore wrong on at least one of them: v1.6's default worked out to 21mm on a phone, smaller than a small dog's paw pad, which is why the slider had to be pushed to maximum to feel right.

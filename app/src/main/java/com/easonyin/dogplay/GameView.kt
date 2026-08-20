@@ -46,8 +46,15 @@ class GameView(ctx: Context, private val prefs: Prefs) : View(ctx) {
      */
     private val mmPx: Float = run {
         val m = resources.displayMetrics
-        val real = listOf(m.xdpi, m.ydpi).filter { it in 100f..900f }
-        val dpi = if (real.isEmpty()) m.densityDpi.toFloat() else real.average().toFloat()
+        val fallback = m.densityDpi.toFloat()
+        val x = m.xdpi
+        val y = m.ydpi
+        val sane = x in 100f..900f && y in 100f..900f
+        // 有些机型只有一个轴报真实密度、另一个轴报分桶后的 densityDpi
+        // （比如 xdpi=160、ydpi=440）。这时取平均会得到一个两边都不对的值，
+        // 不如整体退回 densityDpi。
+        val agree = sane && kotlin.math.abs(x - y) <= 0.25f * maxOf(x, y)
+        val dpi = if (agree) (x + y) / 2f else fallback
         dpi / 25.4f
     }
     private val rnd = Random(System.nanoTime())

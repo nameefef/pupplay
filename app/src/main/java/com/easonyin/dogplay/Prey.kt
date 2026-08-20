@@ -59,8 +59,8 @@ class Prey(
     var respawnType: (() -> PreyType)? = null
 
     /**
-     * 实际尺寸完全由屏幕决定：短边 × 档位比例 × 角色的体型系数。
-     * 这样同一档在任何手机上看起来都一样大，也天然不会超出屏幕。
+     * 实际尺寸由物理毫米决定：目标绘制高度 × 角色的体型系数，
+     * 再压到「数量上限」和「屏幕短边的 68%」之内，保证还有地方跑。
      */
     private fun effectiveSize(w: Float, h: Float): Float {
         val want = targetHeightPx / SPRITE_HEIGHT * bodyRatio()
@@ -68,6 +68,20 @@ class Prey(
         val byScreen = minOf(w, h) * 0.68f / SPRITE_HEIGHT
         return want.coerceAtMost(minOf(maxSize, byScreen))
     }
+
+    /**
+     * 离屏幕边缘要留的空白，分横纵两个方向算。
+     *
+     * 以前横纵都直接拿 size 当边距，但 size 是身体「长度」：
+     * 横向半宽约 0.65×size，纵向半高只有约 0.4×size，纵向等于多留了一倍半。
+     * 猎物一大，h - 2×size 就变成负数甚至空区间，coerceIn 直接抛异常。
+     * 再加一道 45% 的硬上限，任何尺寸下可活动区间都保证是正的。
+     */
+    private fun marginX(w: Float, k: Float = 1f): Float =
+        minOf(size * 0.65f * k, w * 0.45f)
+
+    private fun marginY(h: Float, k: Float = 1f): Float =
+        minOf(size * SPRITE_HEIGHT * 0.55f * k, h * 0.45f)
 
     /**
      * 体型系数：保留「狐狸比老鼠大」的差别，但把差距收窄到 0.75~1.25 倍，
@@ -80,9 +94,10 @@ class Prey(
     fun spawn(w: Float, h: Float) {
         respawnType?.invoke()?.let { type = it }
         size = effectiveSize(w, h)
-        val m = size * 0.6f
-        x = m + rnd.nextFloat() * (w - 2 * m)
-        y = m + rnd.nextFloat() * (h - 2 * m)
+        val mx = marginX(w)
+        val my = marginY(h)
+        x = mx + rnd.nextFloat() * (w - 2 * mx)
+        y = my + rnd.nextFloat() * (h - 2 * my)
         val a = rnd.nextFloat() * 6.2832f
         val base = type.speedDp * dp
         vx = cos(a.toDouble()).toFloat() * base
@@ -116,30 +131,33 @@ class Prey(
         vy = sin(a.toDouble()).toFloat() * spd
         state = 2
         timer = 0.35f + rnd.nextFloat() * 0.45f
-        tx = (x + vx * 0.9f).coerceIn(size, w - size)
-        ty = (y + vy * 0.9f).coerceIn(size, h - size)
+        val mx = marginX(w)
+        val my = marginY(h)
+        tx = (x + vx * 0.9f).coerceIn(mx, w - mx)
+        ty = (y + vy * 0.9f).coerceIn(my, h - my)
     }
 
     private fun pickTarget(w: Float, h: Float) {
-        val m = size * 0.7f
+        val mx = marginX(w, 1.15f)
+        val my = marginY(h, 1.15f)
         // 老鼠、甲虫这类爱贴边跑；其他的满屏跑
         val edgeLover = type == PreyType.MOUSE || type == PreyType.BEETLE ||
                 type == PreyType.SPIDER || type == PreyType.CRAB
         if (edgeLover && rnd.nextFloat() < 0.55f) {
             when (rnd.nextInt(4)) {
-                0 -> { tx = m + rnd.nextFloat() * (w - 2 * m); ty = m }
-                1 -> { tx = m + rnd.nextFloat() * (w - 2 * m); ty = h - m }
-                2 -> { tx = m; ty = m + rnd.nextFloat() * (h - 2 * m) }
-                else -> { tx = w - m; ty = m + rnd.nextFloat() * (h - 2 * m) }
+                0 -> { tx = mx + rnd.nextFloat() * (w - 2 * mx); ty = my }
+                1 -> { tx = mx + rnd.nextFloat() * (w - 2 * mx); ty = h - my }
+                2 -> { tx = mx; ty = my + rnd.nextFloat() * (h - 2 * my) }
+                else -> { tx = w - mx; ty = my + rnd.nextFloat() * (h - 2 * my) }
             }
         } else {
-            tx = m + rnd.nextFloat() * (w - 2 * m)
-            ty = m + rnd.nextFloat() * (h - 2 * m)
+            tx = mx + rnd.nextFloat() * (w - 2 * mx)
+            ty = my + rnd.nextFloat() * (h - 2 * my)
         }
         // 目标别离得太近，不然看着像在原地抖
         if (hypot(tx - x, ty - y) < size * 3f) {
-            tx = m + rnd.nextFloat() * (w - 2 * m)
-            ty = m + rnd.nextFloat() * (h - 2 * m)
+            tx = mx + rnd.nextFloat() * (w - 2 * mx)
+            ty = my + rnd.nextFloat() * (h - 2 * my)
         }
     }
 
@@ -153,7 +171,8 @@ class Prey(
         if (scale < 1f) scale = (scale + dt * 4.5f).coerceAtMost(1f)
 
         val base = type.speedDp * dp * speedMul
-        val m = size * 0.6f
+        val mx = marginX(w)
+        val my = marginY(h)
 
         when (type.motion) {
             Motion.BOUNCE -> {
@@ -164,10 +183,10 @@ class Prey(
                     val k = base / cur; vx *= k; vy *= k
                 }
                 x += vx * dt; y += vy * dt
-                if (x < m) { x = m; vx = abs(vx) }
-                if (x > w - m) { x = w - m; vx = -abs(vx) }
-                if (y < m) { y = m; vy = abs(vy) }
-                if (y > h - m) { y = h - m; vy = -abs(vy) }
+                if (x < mx) { x = mx; vx = abs(vx) }
+                if (x > w - mx) { x = w - mx; vx = -abs(vx) }
+                if (y < my) { y = my; vy = abs(vy) }
+                if (y > h - my) { y = h - my; vy = -abs(vy) }
             }
 
             else -> {
@@ -241,10 +260,10 @@ class Prey(
                             }
                         }
                         // 撞到边界就贴边并重选目标
-                        if (x < m) { x = m; pickTarget(w, h) }
-                        if (x > w - m) { x = w - m; pickTarget(w, h) }
-                        if (y < m) { y = m; pickTarget(w, h) }
-                        if (y > h - m) { y = h - m; pickTarget(w, h) }
+                        if (x < mx) { x = mx; pickTarget(w, h) }
+                        if (x > w - mx) { x = w - mx; pickTarget(w, h) }
+                        if (y < my) { y = my; pickTarget(w, h) }
+                        if (y > h - my) { y = h - my; pickTarget(w, h) }
                     }
                 }
             }

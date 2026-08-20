@@ -65,8 +65,8 @@ class Prefs(private val ctx: Context) {
     /** 给界面显示用 */
     val sizeMmLabel: Int get() = Math.round(sizeMm)
 
-    /** 相对默认档的缩放，菜单预览格子用 */
-    val sizeRelative: Float get() = sizeMm / SIZE_MM[6]
+    /** 档位归一到 0~1，菜单预览格子用；改档位表也不会失配 */
+    val sizeNorm: Float get() = (size - 1) / 9f
 
     /** 速度档位 -> 实际倍率 */
     val speedMul: Float get() = when (speed) {

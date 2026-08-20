@@ -236,7 +236,7 @@ class MainActivity : AppCompatActivity() {
             val tileW = (resources.displayMetrics.widthPixels - pad(32) - pad(24)) / cols
             val grid = GridLayout(this).apply { columnCount = cols }
             for (t in list) {
-                val tile = PreyTile(this, t, { customPreyBmp }, { prefs.sizeRelative })
+                val tile = PreyTile(this, t, { customPreyBmp }, { prefs.sizeNorm })
                 tile.picked = prefs.preyKey == t.key
                 tile.layoutParams = GridLayout.LayoutParams().apply {
                     width = tileW
