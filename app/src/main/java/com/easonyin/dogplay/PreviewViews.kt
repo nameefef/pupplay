@@ -60,10 +60,8 @@ class PreyTile(
         c.drawRoundRect(r, 14f * dp, 14f * dp, p)
         p.style = Paint.Style.FILL
 
-        // 预览跟着「大小」档位一起缩放，滑动时能直接看到效果
-        // 预览跟着「大小」档位缩放；倍率压缩一下并封顶，免得画到格子外面
-        // 按可用宽高反推能画多大，让角色尽量铺满格子；
-        // 再按大小档位轻微缩放，滑动大小滑杆时预览也跟着动
+        // 先按可用宽高反推能画多大，让角色尽量铺满格子，
+        // 再按大小档位线性缩放，拖动大小滑杆时预览跟着动
         val fit = minOf((w - 10f * dp) / 1.35f, (h - 30f * dp) / 1.05f)
         val vis = 0.62f + 0.38f * sizeNorm().coerceIn(0f, 1f)
         val s = fit * vis
