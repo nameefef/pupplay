@@ -1,8 +1,8 @@
 # Changelog
 
-All releases are licensed under the **GNU Affero General Public License v3.0**. The `LICENSE` file was added to the repository in v1.4; as sole copyright holder, nameefef releases every earlier version (v1.0–v1.3) under the same terms.
+All versions of PupPlay are licensed under the **GNU Affero General Public License v3.0**. The `LICENSE` file landed in v1.4; as sole copyright holder, nameefef licenses all earlier work under the same terms.
 
-Note that the v1.0–v1.3 APK binaries do not physically contain the licence text, since it was not bundled until v1.4. The licence still applies to them; if you want a binary that carries its own licence text, use v1.4 or later.
+Only **v1.4 and later are distributed as binaries**. The v1.0–v1.3 releases were withdrawn, because their APKs were built before the licence text was bundled into the package. The entries below stay as a record of what changed in each version — the source for every one of them is still in the repository history under tags `v1.0`–`v1.3`.
 
 ---
 

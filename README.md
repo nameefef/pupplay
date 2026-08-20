@@ -116,7 +116,7 @@ Every character is drawn as Canvas vector paths, so they stay perfectly sharp at
 
 PupPlay is free software licensed under the **GNU Affero General Public License v3.0** — see [LICENSE](LICENSE).
 
-This licence applies to **every released version, including v1.0–v1.3**, which were published before the `LICENSE` file existed — as sole copyright holder, nameefef releases those under the same terms. See [CHANGELOG.md](CHANGELOG.md).
+The licence covers the entire project history. Only **v1.4 and later are distributed as binaries** — the earlier releases were withdrawn because their APKs were built before the licence text was bundled into the package. See [CHANGELOG.md](CHANGELOG.md).
 
 You are free to use, study, modify, and redistribute it. If you distribute a modified version, or run a modified version as a network service, you must release your changes under the same licence.
 

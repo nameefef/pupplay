@@ -116,7 +116,7 @@ app/src/main/res/
 
 PupPlay 依 **GNU Affero General Public License v3.0** 开源,全文见 [LICENSE](LICENSE)。
 
-这个许可证适用于**所有已发布版本,包括 LICENSE 文件出现之前的 v1.0–v1.3**——作为唯一版权人,nameefef 以同样条款授权那些版本。见 [CHANGELOG.md](CHANGELOG.md)。
+许可证覆盖整个项目历史。但只有 **v1.4 及以后的版本以二进制形式分发**——更早的 Release 已经撤下,因为那些 APK 是在许可证被打包进安装包之前构建的。见 [CHANGELOG.md](CHANGELOG.md)。
 
 你可以自由使用、研究、修改和再分发。但如果你分发修改过的版本,或者把修改过的版本作为网络服务运行,必须以同样的协议公开你的改动。
 
