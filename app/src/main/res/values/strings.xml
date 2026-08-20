@@ -166,4 +166,5 @@
     <string name="size_smallest">smallest</string>
     <string name="size_biggest">biggest · easiest to hit</string>
     <string name="size_cap_hint">However far you push this, no critter grows past about a third of the screen — and they shrink a little when there are many at once, so the field never gets swamped. All characters are drawn as vectors, so they stay razor sharp at any size.</string>
+    <string name="footer_license">PupPlay · Free software under AGPL-3.0\nSource: github.com/nameefef/pupplay</string>
 </resources>

@@ -112,6 +112,14 @@ app/src/main/res/
 
 Every character is drawn as Canvas vector paths, so they stay perfectly sharp at any size — there is no bitmap to pixelate. All artwork and audio is generated in code — there are no image or audio asset files in the repo apart from the launcher icon.
 
+## Licence
+
+PupPlay is free software licensed under the **GNU Affero General Public License v3.0** — see [LICENSE](LICENSE).
+
+You are free to use, study, modify, and redistribute it. If you distribute a modified version, or run a modified version as a network service, you must release your changes under the same licence.
+
+> Note: AGPL's network clause (§13) has little practical effect here, since the game runs entirely offline. The copyleft obligations on redistribution are the part that matters.
+
 ## Signing
 
 The APKs in Releases are signed with Android's default debug key so you can install and try them immediately. **They cannot be published to an app store.** Generate your own keystore and re-sign for a real release.
