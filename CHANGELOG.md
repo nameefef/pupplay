@@ -6,6 +6,16 @@ Only **v1.4 and later are distributed as binaries**. The v1.0–v1.3 releases we
 
 ---
 
+## v1.5 — 2026-08-20
+
+- **Size is now measured against the screen instead of a fixed multiplier.** Each of the 10 steps defines the critter's size as a percentage of the screen's short edge (7% to 40% of screen height in landscape), so a given step looks the same on a small phone and on a tablet. Previously size was `character base size × multiplier`, which meant the same setting produced wildly different results across devices, and the multiplier numbers were misleading — a fox could not exceed 1.86× on a typical phone no matter how far the slider went, so the top steps did nothing.
+- **Step 5 is the auto-fitted sweet spot and the new default.** On a common 1080×2400 phone that makes the default roughly 50–60% larger than before, and considerably larger on tablets, where the old fixed sizes were far too small.
+- Character size differences are preserved but compressed to a 0.75–1.25 band, so a fox still reads as bigger than a mouse without hitting the screen limit several steps before it does.
+- The per-critter screen cap was removed as redundant — the step definition bounds size inherently. The rule that keeps all critters' combined footprint under 28% of the play area still applies.
+- The size preference moved to a new key, since the step numbers changed meaning.
+
+---
+
 ## v1.4 — 2026-08-20
 
 Licensing only, no gameplay changes.

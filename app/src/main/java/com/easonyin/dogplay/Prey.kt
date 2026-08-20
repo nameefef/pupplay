@@ -35,13 +35,14 @@ class Prey(
     var type: PreyType,
     private val dp: Float,
     private val rnd: Random,
-    private val sizeMul: Float = 1f,
-    /** 外部算好的尺寸上限（像素）。见 GameView.sizeCap */
+    /** 猎物占屏幕短边的比例，见 Prefs.sizeFraction */
+    private val sizeFraction: Float = 0.18f,
+    /** 数量多时的额外收敛上限（像素）。见 GameView.sizeCap */
     private val maxSize: Float = Float.MAX_VALUE
 ) {
     var x = 0f; var y = 0f
     var vx = 0f; var vy = 0f
-    var size = type.sizeDp * dp * sizeMul
+    var size = type.sizeDp * dp
 
     private var state = 0            // 0=停顿 1=奔跑 2=逃窜
     private var timer = 0f
@@ -58,11 +59,18 @@ class Prey(
     var respawnType: (() -> PreyType)? = null
 
     /**
-     * 实际尺寸：按倍率放大后再封顶。
-     * 不封顶的话大倍率下留白会超过屏幕宽度，坐标算出来是负的，猎物会卡在角落。
+     * 实际尺寸完全由屏幕决定：短边 × 档位比例 × 角色的体型系数。
+     * 这样同一档在任何手机上看起来都一样大，也天然不会超出屏幕。
      */
     private fun effectiveSize(w: Float, h: Float): Float =
-        (type.sizeDp * dp * sizeMul).coerceAtMost(minOf(maxSize, minOf(w, h) * 0.30f))
+        (minOf(w, h) * sizeFraction * bodyRatio()).coerceAtMost(maxSize)
+
+    /**
+     * 体型系数：保留「狐狸比老鼠大」的差别，但把差距收窄到 0.75~1.25 倍，
+     * 否则大体型角色会在低档位就顶满屏幕，小角色在高档位又还是很小。
+     */
+    private fun bodyRatio(): Float =
+        (type.sizeDp / 44f).coerceIn(0.75f, 1.25f)
 
     /** 生成新一轮的位置 */
     fun spawn(w: Float, h: Float) {

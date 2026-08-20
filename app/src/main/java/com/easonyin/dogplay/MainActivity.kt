@@ -235,7 +235,7 @@ class MainActivity : AppCompatActivity() {
             val tileW = (resources.displayMetrics.widthPixels - pad(32) - pad(24)) / cols
             val grid = GridLayout(this).apply { columnCount = cols }
             for (t in list) {
-                val tile = PreyTile(this, t, { customPreyBmp }, { prefs.sizeMul })
+                val tile = PreyTile(this, t, { customPreyBmp }, { prefs.sizeRelative })
                 tile.picked = prefs.preyKey == t.key
                 tile.layoutParams = GridLayout.LayoutParams().apply {
                     width = tileW
@@ -322,13 +322,13 @@ class MainActivity : AppCompatActivity() {
 
         sizeLabel = TextView(this).apply {
             setTextColor(cText); textSize = 14f
-            text = getString(R.string.size_fmt, prefs.size, prefs.sizeLabel)
+            text = getString(R.string.size_fmt, prefs.size, prefs.sizePercent)
             setPadding(0, pad(10), 0, 0)
         }
         wrap.addView(sizeLabel)
         wrap.addView(seek(0, 9, prefs.size - 1) { v ->
             prefs.size = v + 1
-            sizeLabel?.text = getString(R.string.size_fmt, prefs.size, prefs.sizeLabel)
+            sizeLabel?.text = getString(R.string.size_fmt, prefs.size, prefs.sizePercent)
             preyTiles.forEach { it.invalidate() }
         })
         wrap.addView(TextView(this).apply {

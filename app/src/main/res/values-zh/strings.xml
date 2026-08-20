@@ -158,13 +158,11 @@
     <string name="snd_pop">啵</string>
     <string name="snd_miss">落空</string>
     <string name="snd_reward">奖励</string>
-    <string name="size_fmt">大小：%1$d　%2$s</string>
+    <string name="size_fmt">大小：%1$d/10　·　屏幕高度的 %2$d%%</string>
     <string name="sec_lang">语言</string>
     <string name="lang_system">跟随系统</string>
     <string name="lang_en">English</string>
     <string name="lang_zh">中文</string>
-    <string name="size_smallest">最小</string>
-    <string name="size_biggest">最大 · 最好拍中</string>
-    <string name="size_cap_hint">不管推到多大，单只猎物都不会超过屏幕的三分之一；数量多的时候还会自动再收一点，场地不会被挤满。所有角色都是矢量绘制的，放到多大都不会糊。</string>
+    <string name="size_cap_hint">大小是按你的屏幕算的，不是固定数值，所以同一档在任何手机上看起来都一样大。第 5 档是按这块屏幕挑出来的甜点位，也是默认值。猎物数量多时会自动收小一点，场地不会被挤满。所有角色都是矢量绘制的，放到多大都不会糊。</string>
     <string name="footer_license">PupPlay · 依 AGPL-3.0 协议开源\n源码：github.com/nameefef/pupplay</string>
 </resources>

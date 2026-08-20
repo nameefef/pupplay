@@ -45,24 +45,25 @@ class Prefs(private val ctx: Context) {
         set(v) = sp.edit().putInt("count", v.coerceIn(1, 10)).apply()
 
     /**
-     * 猎物大小 1..10。换了新 key，老版本存的 5 档值不会被误读成新档位。
-     * 默认 4 = 1.0 倍。
+     * 猎物大小 1..10。第 5 档是按屏幕自动算出来的「最合适」大小，也是默认值。
+     * 又换了一次 key：档位含义从「倍率」变成了「占屏幕短边的比例」，老值不能沿用。
      */
     var size: Int
-        get() = sp.getInt("size2", 4).coerceIn(1, 10)
-        set(v) = sp.edit().putInt("size2", v.coerceIn(1, 10)).apply()
+        get() = sp.getInt("size3", 5).coerceIn(1, 10)
+        set(v) = sp.edit().putInt("size3", v.coerceIn(1, 10)).apply()
 
-    /** 大小档位 -> 实际倍率。上限做到 3.4 倍，小型犬也能一爪盖住。 */
-    val sizeMul: Float get() = SIZE_STEPS[size - 1]
+    /**
+     * 档位 -> 猎物占屏幕短边（横屏时就是屏幕高度）的比例。
+     * 不再用「角色基准 × 倍率」，因为那个数字跟屏幕无关，
+     * 同一个倍率在小屏上占半个屏幕、在平板上小得看不见。
+     */
+    val sizeFraction: Float get() = SIZE_FRACTIONS[size - 1]
 
-    val sizeLabel: String get() {
-        val base = SIZE_LABELS[size - 1]
-        return when (size) {
-            1 -> base + " · " + ctx.getString(R.string.size_smallest)
-            10 -> base + " · " + ctx.getString(R.string.size_biggest)
-            else -> base
-        }
-    }
+    /** 给界面显示用的百分比 */
+    val sizePercent: Int get() = Math.round(sizeFraction * 100f)
+
+    /** 相对中间档的缩放，菜单预览格子用 */
+    val sizeRelative: Float get() = sizeFraction / SIZE_FRACTIONS[4]
 
     /** 速度档位 -> 实际倍率 */
     val speedMul: Float get() = when (speed) {
@@ -169,11 +170,12 @@ class Prefs(private val ctx: Context) {
     fun clearFile(f: File) { try { f.delete() } catch (e: Throwable) {} }
 
     companion object {
-        private val SIZE_STEPS = floatArrayOf(
-            0.5f, 0.65f, 0.8f, 1.0f, 1.25f, 1.55f, 1.9f, 2.35f, 2.85f, 3.4f
-        )
-        private val SIZE_LABELS = arrayOf(
-            "0.5×", "0.65×", "0.8×", "1.0×", "1.25×", "1.55×", "1.9×", "2.35×", "2.85×", "3.4×"
+        /**
+         * 每一档猎物占屏幕短边的比例。第 5 档 0.18 是中间档，
+         * 对绝大多数手机来说都是「一眼看得见、爪子够得着、又不占满屏」的甜点。
+         */
+        private val SIZE_FRACTIONS = floatArrayOf(
+            0.07f, 0.09f, 0.115f, 0.145f, 0.18f, 0.22f, 0.26f, 0.30f, 0.35f, 0.40f
         )
     }
 }

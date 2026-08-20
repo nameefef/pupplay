@@ -144,16 +144,12 @@ class GameView(ctx: Context, private val prefs: Prefs) : View(ctx) {
     }
 
     /**
-     * 猎物尺寸的双重上限，保证「放大」不会失控：
-     *  1) 单只不超过屏幕短边的 30%；
-     *  2) 所有猎物加起来占地不超过场地面积的 28%，数量越多单只越收敛。
-     * 两者取小。
+     * 数量多时的额外收敛：所有猎物加起来占地不超过场地面积的 28%。
+     * 单只的上限已经由「档位 = 占屏幕短边的比例」天然保证了，这里只管别挤满屏。
      */
     private fun sizeCap(w: Float, h: Float): Float {
         val n = prefs.count.coerceAtLeast(1)
-        val byArea = kotlin.math.sqrt(0.28f * w * h / n) / 0.9f
-        val byEdge = minOf(w, h) * 0.30f
-        return minOf(byArea, byEdge)
+        return kotlin.math.sqrt(0.28f * w * h / n) / 0.9f
     }
 
     private fun rebuildPrey(w: Float, h: Float) {
@@ -162,7 +158,7 @@ class GameView(ctx: Context, private val prefs: Prefs) : View(ctx) {
         val cap = sizeCap(w, h)
         repeat(prefs.count) {
             val t = if (mixed) PreyType.playable.random(rnd) else prefs.prey
-            val p = Prey(t, dp, rnd, prefs.sizeMul, cap)
+            val p = Prey(t, dp, rnd, prefs.sizeFraction, cap)
             if (mixed) p.respawnType = { PreyType.playable.random(rnd) }
             p.spawn(w, h)
             preyList.add(p)
